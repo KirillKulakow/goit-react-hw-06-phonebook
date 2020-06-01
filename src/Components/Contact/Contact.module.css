@@ -1,0 +1,31 @@
+.contact{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    padding: 5px 10px;
+}
+
+.contact{
+    box-shadow: 0 0 7px 0 rgba(0,0,0,0.3);
+}
+
+.name{
+    display: inline-block;
+    width: 50%;
+}
+.number{
+    display: inline-block;
+    width: 35%;
+}
+.delete{
+    color: white;
+    background-color: #FF0000;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.delete:hover{
+    background-color: #CC0000;
+}
