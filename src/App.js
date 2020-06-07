@@ -4,14 +4,15 @@ import './App.css';
 import './AnimationStyles/Error.css';
 import './AnimationStyles/Contact.css';
 import './AnimationStyles/Filter.css';
-import NavBar from './Components/NavBar/NavBar';
-import Form from './Components/Form/Form';
+import NavBar from './Components/AppTitle/NavBar';
+import Form from './Components/ContactForm/Form';
 import FilterContacts from './Components/FilterContacts/FilterContacts';
-import ContactList from './Containers/ContactList/ContactList';
+import ContactList from './Common/ContactList/ContactList';
 import Contact from './Components/Contact/Contact';
-import Error from './Components/Error/Error';
-import { addContact, deleteContact, filteredContact } from './redux/modules/contacts/actions';
+import Error from './Components/NotificationError/Error';
+import {addContact, deleteContact, filteredContact, setContact} from './redux/modules/contacts/actions';
 import {connect, useDispatch} from 'react-redux';
+import {getLS, saveLS} from "./helpers/localStorage";
 
 function App({contacts, filter}) {
   const [error, setError] = useState(false);
@@ -21,15 +22,20 @@ function App({contacts, filter}) {
   const dispatch = useDispatch();
 
   const addToContacts = (obj) => {
-    if(contacts.some(el => el.name === obj.name) || contacts.some(el => el.number === obj.number)){
+    const isExist = contacts.some(({name,number}) => (name === obj.name || number === obj.number));
+    if(isExist){
       setError(true);
       return
     }
     dispatch(addContact(obj));
+    saveLS('contacts', [...contacts, obj]);
   };
 
   const deleteFromContacts = (id) => {
     dispatch(deleteContact(id));
+    let newContacts = contacts.filter((contact) => contact.id !== id);
+    saveLS('contacts', [...newContacts])
+    dispatch(filteredContact(''));
   };
 
   const filteredContacts = (query) => {
@@ -44,6 +50,13 @@ function App({contacts, filter}) {
       return () => clearTimeout(timer);
     }
   },[error]);
+
+  useEffect(() => {
+    let newContacts = getLS('contacts');
+    if(newContacts){
+      dispatch(setContact(newContacts));
+    };
+  }, [])
 
   return (
       <>

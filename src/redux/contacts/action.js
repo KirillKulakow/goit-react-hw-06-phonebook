@@ -1,4 +1,4 @@
-import { ADD_CONTACT, DELETE_CONTACT, FILTER_CONTACT } from './types';
+import {ADD_CONTACT, DELETE_CONTACT, FILTER_CONTACT, SET_CONTACT} from './types';
 
 export const addContact = (data) => ({
     type: ADD_CONTACT,
@@ -14,3 +14,8 @@ export const filteredContact = (query) => ({
     type: FILTER_CONTACT,
     payload: query,
 });
+
+export const setContact = (contacts) => ({
+    type: SET_CONTACT,
+    payload: [...contacts],
+})
